@@ -16,7 +16,7 @@ export const addToCart = createAsyncThunk(
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      // console.log("Add to cart response:", response.data.cart);
+      console.log("Add to cart response:", response.data.cart);
       return response.data.cart;
     } catch (error) {
       return rejectWithValue(

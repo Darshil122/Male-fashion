@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../img/logo.png";
 import search from "../img/icon/search.png";
 import heart from "../img/icon/heart.png";
-import cart from "../img/icon/cart.png";
+import carticon from "../img/icon/cart.png";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { ShowProfile } from "../features/userSlice";
@@ -22,7 +22,13 @@ const Navbar = () => {
   }, [dispatch]);
 
   const { user } = useSelector((state) => state.userDetail);
-  // console.log("Navbar User:", user);
+const { cart } = useSelector((state) => state.cart);
+
+const cartItems = Array.isArray(cart?.products)
+  ? cart.products.filter((item) => item.productId !== null)
+  : [];
+
+const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <>
@@ -124,15 +130,15 @@ const Navbar = () => {
             </div>
             <div className="col-lg-3 col-md-3">
               <div className="header__nav__option">
-                <a href="#" className="search-switch">
+                {/* <a href="#" className="search-switch">
                   <img src={search} alt="" />
                 </a>
                 <a href="#">
                   <img src={heart} alt="" />
-                </a>
-                <Link to="/shopping-cart">
-                  <img src={cart} alt="" />
-                  {/* <span>0</span> */}
+                </a> */}
+                <Link to="/shopping-cart" title="cart">
+                  <img src={carticon} alt="" />
+                  <span>{totalItems}</span>
                 </Link>
                 {/* <div className="price">$0.00</div> */}
               </div>

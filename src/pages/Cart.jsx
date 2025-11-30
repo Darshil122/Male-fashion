@@ -4,30 +4,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCart, removeFromCart, addToCart } from "../features/cartSlice";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-// import cart1 from "../img/shopping-cart/cart-1.jpg";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const {cart} = useSelector((state) => state.cart);
-  // const products = Array.isArray(cart?.products) ? cart.products : [];
+  const { cart } = useSelector((state) => state.cart);
   const products = Array.isArray(cart?.products)
     ? cart.products.filter((item) => item.productId !== null)
     : [];
 
-  // console.log("fetch cart", products);
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (cart?.products) {
-  //     const invalidItems = cart.products.filter((item) => !item.productId);
-
-  //     if (invalidItems.length > 0) {
-  //       toast.info("Removed unavailable products from your cart");
-  //     }
-  //   }
-  // }, [cart]);
+  const subtotal = products.reduce((acc, item) => {
+    const finalPrice =
+      item.productId.price * (1 - item.productId.discountPercent / 100);
+    return acc + finalPrice * item.quantity;
+  }, 0);
 
   return (
     <div>
@@ -63,45 +56,6 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* <tr key={item._id}>
-                      <td className="product__cart__item">
-                        <div className="product__cart__item__pic">
-                          <img
-                            src={item.productId.image}
-                            alt={item.productId.name}
-                          />
-                        </div>
-                        <div className="product__cart__item__text">
-                          <h6>{item.productId.name}</h6>
-                          <h5>₹{item.productId.price}</h5>
-                        </div>
-                      </td>
-                      <td className="quantity__item">
-                        <div className="quantity">
-                          <div className="pro-qty-2">
-                            <input type="text" value={item.quantity} readOnly />
-                          </div>
-                        </div>
-                      </td>
-                      <td className="cart__price">
-                        ₹{item.productId.price * item.quantity}
-                      </td>
-                      <td
-                        className="cart__close"
-                        onClick={() =>
-                          dispatch(removeFromCart(item.productId._id))
-                            .then(() => dispatch(fetchCart()))
-                            .then(() => {
-                              toast.success(
-                                "Item removed from cart successfully"
-                              );
-                            })
-                        }
-                        style={{ cursor: "pointer" }}
-                      >
-                        <i className="fa fa-close"></i>
-                      </td>
-                    </tr> */}
                     {products.length > 0 ? (
                       products.map((item) => (
                         <tr key={item._id}>
@@ -116,13 +70,7 @@ const Cart = () => {
                             </div>
                             <div className="product__cart__item__text">
                               <h6>{item.productId.name}</h6>
-                              <h5>
-                                ₹
-                                {(
-                                  item.productId.price *
-                                  (1 - item.productId.discountPercent / 100)
-                                ).toFixed(2)}
-                              </h5>
+                              <h5>₹{item.productId.price * item.quantity}</h5>
                             </div>
                           </td>
                           <td className="quantity__item">
@@ -132,9 +80,17 @@ const Cart = () => {
                                 style={{ width: "120px" }}
                               >
                                 <button
-                                  className="btn btn-outline-secondary"
+                                  className="btn"
                                   type="button"
                                   disabled={item.quantity <= 1}
+                                  onClick={() =>
+                                    dispatch(
+                                      addToCart({
+                                        productId: item.productId._id,
+                                        quantity: -1,
+                                      })
+                                    ).then(() => dispatch(fetchCart()))
+                                  }
                                 >
                                   −
                                 </button>
@@ -147,8 +103,16 @@ const Cart = () => {
                                 />
 
                                 <button
-                                  className="btn btn-outline-secondary"
+                                  className="btn"
                                   type="button"
+                                  onClick={() =>
+                                    dispatch(
+                                      addToCart({
+                                        productId: item.productId._id,
+                                        quantity: 1,
+                                      })
+                                    ).then(() => dispatch(fetchCart()))
+                                  }
                                 >
                                   +
                                 </button>
@@ -156,17 +120,22 @@ const Cart = () => {
                             </div>
                           </td>
                           <td className="cart__price">
-                            ₹{item.productId.price * item.quantity}
+                            ₹
+                            {(
+                              item.productId.price *
+                              (1 - item.productId.discountPercent / 100)
+                            ).toFixed(2)}
                           </td>
                           <td
                             className="cart__close"
                             onClick={() =>
                               dispatch(removeFromCart(item.productId._id))
-                                .then(() => dispatch(fetchCart()))
+                                .unwrap()
                                 .then(() => {
                                   toast.success(
                                     "Item removed from cart successfully"
                                   );
+                                  dispatch(fetchCart());
                                 })
                             }
                             style={{ cursor: "pointer" }}
@@ -189,13 +158,6 @@ const Cart = () => {
                     <Link to="/category/all">Continue Shopping</Link>
                   </div>
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-6">
-                  <div className="continue__btn update__btn">
-                    {/* <Link to="#">
-                      <i className="fa fa-spinner"></i> Update cart
-                    </Link> */}
-                  </div>
-                </div>
               </div>
             </div>
             <div className="col-lg-4">
@@ -210,10 +172,10 @@ const Cart = () => {
                 <h6>Cart total</h6>
                 <ul>
                   <li>
-                    Subtotal <span>$ 169.50</span>
+                    Subtotal <span>₹{subtotal.toFixed(2)}</span>
                   </li>
                   <li>
-                    Total <span>$ 169.50</span>
+                    Total <span>₹{subtotal.toFixed(2)}</span>
                   </li>
                 </ul>
                 <Link to="#" className="primary-btn">

@@ -59,7 +59,7 @@ const ProductSkeleton = () => {
            ></div>
 
            {/* Product Details List */}
-           {[...Array(6)].map((_, i) => (
+           {[...Array(4)].map((_, i) => (
              <div
                key={i}
                className="bg-secondary rounded mb-2"

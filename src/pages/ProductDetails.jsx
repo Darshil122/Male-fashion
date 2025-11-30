@@ -14,21 +14,22 @@ import { toast } from "react-toastify";
 const ProductDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  // console.log("productId", id);
+  
   const navigate = useNavigate();
   const [comment, setComment] = useState("");
 
   // Redux state
-  const product = useSelector((state) => state.product.items); // single product details
-  const review = useSelector((state) => state.product.review); // reviews
+  const product = useSelector((state) => state.product.singleProduct);
+  // const review = useSelector((state) => state.product.review);
   const { status } = useSelector((state) => state.cart);
 
-  // Fetch product and reviews on page load
   useEffect(() => {
     if (id) {
       dispatch(productDetails(id));
       dispatch(productReview({ productId: id }));
     }
-    dispatch(fetchCategoryProducts("all")); // fetch all products if needed
+    dispatch(fetchCategoryProducts("all"));
   }, [id, dispatch]);
 
   // Add to cart handler
@@ -40,8 +41,8 @@ const ProductDetails = () => {
 
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("You must be logged in to add items to the cart.");
       navigate("/signin");
+      toast.error("You must be logged in to add items to the cart.");
       return;
     }
 
@@ -77,7 +78,6 @@ const ProductDetails = () => {
         toast.success("Review submitted successfully");
         setComment("");
 
-        // Refresh reviews and product details to show new review
         dispatch(productReview({ productId: id }));
         dispatch(productDetails(id));
       })
@@ -89,7 +89,8 @@ const ProductDetails = () => {
   const isOutOfStock = product?.stock === 0;
 
   // Render skeleton while loading
-  if (!product || !product._id) {
+  if (!product._id) {
+    // console.log("Produt id", product._id);
     return <ProductDetailsSkeleton />;
   }
 

@@ -76,6 +76,7 @@ const productSlice = createSlice({
   name: "product",
   initialState: {
     items: [],
+    singleProduct: {},
     review: [],
     status: "idle",
     error: null,
@@ -101,7 +102,7 @@ const productSlice = createSlice({
       })
       .addCase(productDetails.fulfilled, (state, action) => {
         state.status = "success";
-        state.items = action.payload;
+        state.singleProduct = action.payload;
       })
       .addCase(productDetails.rejected, (state, action) => {
         state.status = "failed";

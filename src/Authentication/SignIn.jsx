@@ -37,10 +37,13 @@ const SignIn = () => {
           <div className="card p-4 shadow">
             <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
               <div className="mb-2">
-                <label>Email:</label>
+                <label htmlFor="email">Email:</label>
                 <input
                   type="email"
+                  id="email"
                   className="form-control"
+                  autoComplete="email"
+                  placeholder="example@gmail.com"
                   {...register("email", { required: "Email is required" })}
                 />
                 {errors.email && (
@@ -49,10 +52,12 @@ const SignIn = () => {
               </div>
 
               <div className="mb-2">
-                <label>Password:</label>
+                <label htmlFor="password">Password:</label>
                 <input
                   type="password"
                   className="form-control"
+                  id="password"
+                  placeholder="*****"
                   {...register("password", {
                     required: "Password is required",
                   })}

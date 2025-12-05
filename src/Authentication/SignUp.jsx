@@ -36,7 +36,7 @@ const SignUp = () => {
       toast.error(error);
     }
   }, [isAuthenticated, message, error, navigate]);
-  
+
   return (
     <div className="container min-vh-100 d-flex align-items-center justify-content-center">
       <div className="row w-100">
@@ -51,6 +51,7 @@ const SignUp = () => {
                   id="name"
                   name="name"
                   autoComplete="name"
+                  placeholder="example"
                   className="form-control"
                   {...register("name", { required: "Name is required" })}
                 />
@@ -65,6 +66,7 @@ const SignUp = () => {
                   id="number"
                   name="number"
                   className="form-control"
+                  placeholder="1234567890"
                   {...register("number", {
                     required: "Phone number is required",
                     pattern: {
@@ -84,6 +86,7 @@ const SignUp = () => {
                   id="email"
                   name="email"
                   autoComplete="email"
+                  placeholder="example@gmail.com"
                   className="form-control"
                   {...register("email", { required: "email is required" })}
                 />
@@ -96,6 +99,7 @@ const SignUp = () => {
                 <input
                   type="password"
                   id="password"
+                  placeholder="*****"
                   className="form-control"
                   {...register("password", {
                     required: "password is required",

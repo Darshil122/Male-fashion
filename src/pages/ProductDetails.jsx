@@ -15,7 +15,7 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   // console.log("productId", id);
-  
+
   const navigate = useNavigate();
   const [comment, setComment] = useState("");
 
@@ -41,8 +41,8 @@ const ProductDetails = () => {
 
     const token = localStorage.getItem("token");
     if (!token) {
+      toast.error("Please log in first.");
       navigate("/signin");
-      toast.error("You must be logged in to add items to the cart.");
       return;
     }
 
@@ -51,7 +51,14 @@ const ProductDetails = () => {
       .then(() => {
         toast.success("Product added to cart successfully");
       })
-      .catch(() => {
+      .catch((err) => {
+        // console.log(err);
+        if (err === "NOT_LOGGED_IN" || err === "SESSION_EXPIRED") {
+          toast.error("Please log in first.");
+          navigate("/signin");
+          return;
+        }
+
         toast.error("Failed to add product to cart.");
       });
   };
@@ -62,7 +69,8 @@ const ProductDetails = () => {
 
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("You must be logged in to submit a review.");
+                          toast.error("Please log in first.");
+
       navigate("/signin");
       return;
     }
@@ -81,7 +89,10 @@ const ProductDetails = () => {
         dispatch(productReview({ productId: id }));
         dispatch(productDetails(id));
       })
-      .catch(() => {
+      .catch((error) => {
+        if (error === "SESSION_EXPIRED") {
+                    toast.error("Please log in first.");
+        }
         toast.error("Failed to submit review.");
       });
   };

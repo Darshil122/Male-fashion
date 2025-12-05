@@ -65,6 +65,9 @@ export const submitProductReview = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
+      if(error.response?.status === 401){
+        return rejectWithValue("SESSION_EXPIRED");
+      }
       return rejectWithValue(
         error.response?.data || { message: "Failed to submit product review" }
       );

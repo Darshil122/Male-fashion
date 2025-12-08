@@ -15,7 +15,9 @@
     "@fortawesome/react-fontawesome": "^3.0.2",
     "@reduxjs/toolkit": "^2.9.0",
     "@tailwindcss/vite": "^4.1.13",
+    "aos": "^2.3.4",
     "axios": "^1.12.2",
+    "framer-motion": "^12.23.25",
     "owl.carousel": "^2.3.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -25,6 +27,7 @@
     "react-slick": "^0.31.0",
     "react-toastify": "^11.0.5",
     "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
     "tailwindcss": "^4.1.13"
   },

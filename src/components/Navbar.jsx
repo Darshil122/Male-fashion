@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../img/logo.png";
-import search from "../img/icon/search.png";
-import heart from "../img/icon/heart.png";
+// import search from "../img/icon/search.png";
+// import heart from "../img/icon/heart.png";
 import carticon from "../img/icon/cart.png";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";

@@ -45,6 +45,10 @@ export const ShowProfile = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     const token = localStorage.getItem("token");
 
+    if (!token) {
+      return rejectWithValue("User not logged in");
+    }
+
     const response = await fetch(
       "https://infikey-store.onrender.com/api/user/profile",
       {

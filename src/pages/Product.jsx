@@ -9,6 +9,7 @@ const Product = () => {
   const {category} = useParams();
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.product);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -17,6 +18,8 @@ const Product = () => {
     fetchProducts();
   }, [dispatch, category]);
   const allProducts = items.products || items.data ||[];
+  const PER_PAGE = 8;
+  const totalPages = Math.ceil(allProducts.length / PER_PAGE); 
   return (
     <div>
       <section className="breadcrumb-option">
@@ -38,7 +41,7 @@ const Product = () => {
       <section className="shop spad">
         <div className="container">
           <div className="row">
-            {/* <div className="col-lg-3">
+            <div className="col-lg-3">
               <div className="shop__sidebar">
                 <div className="shop__sidebar__search">
                   <form action="#">
@@ -48,7 +51,7 @@ const Product = () => {
                     </button>
                   </form>
                 </div>
-                <div className="shop__sidebar__accordion">
+                {/* <div className="shop__sidebar__accordion">
                   <div className="accordion" id="accordionExample">
                     <div className="card">
                       <div className="card-heading">
@@ -282,55 +285,37 @@ const Product = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
-            </div> */}
+            </div>
             <div className="col-lg-12">
-              <div className="shop__product__option">
-                <div className="row">
-                  <div className="col-lg-6 col-md-6 col-sm-6">
-                    <div className="shop__product__option__left">
-                      {/* <p>
-                        Showing{" "}
-                        {sortedProducts.length > 0
-                          ? `1–${sortedProducts.length}`
-                          : 0}{" "}
-                        of {items.products?.length || 0} results
-                      </p> */}
-                    </div>
-                  </div>
-                  {/* <div className="col-lg-6 col-md-6 col-sm-6">
-                    <div className="shop__product__option__right">
-                      <p>Sort by Price:</p>
-                      <select
-                        id="category"
-                        name="category"
-                        value={sortOption}
-                        onChange={(e) => setSortOption(e.target.value)}
-                      >
-                        <option value="lowToHigh">Low To High</option>
-                        <option value="highToLow">High To Low</option>
-                      </select>
-                    </div>
-                  </div> */}
-                </div>
-              </div>
               {/* product components */}
               {!allProducts || allProducts.length === 0 ? (
                 <ProductsSkeleton />
               ) : (
-                <Products products={allProducts} />
+                <Products
+                  products={allProducts}
+                  page={page}
+                  PER_PAGE={PER_PAGE}
+                />
               )}
               <div className="row">
                 <div className="col-lg-12">
                   <div className="product__pagination">
-                    <Link className="active" to="#">
-                      1
-                    </Link>
-                    <Link to="/">2</Link>
-                    <Link to="/">3</Link>
-                    <span>...</span>
-                    <Link to="/">21</Link>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <Link
+                        className={`m-1 border ${
+                          page === i + 1
+                            ? "bg-primary text-white border-none"
+                            : ""
+                        }`}
+                        to="#"
+                        key={i}
+                        onClick={() => setPage(i + 1)}
+                      >
+                        {i + 1}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>

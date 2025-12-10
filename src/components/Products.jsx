@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Products = ({ products }) => {
+const Products = ({ products, page, PER_PAGE }) => {
   return (
     <div className="row">
-      {products?.map((item) => (
+      {products?.slice((page - 1) * PER_PAGE, page * PER_PAGE).map((item) => (
         <div
           key={item._id}
           className="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mb-4"

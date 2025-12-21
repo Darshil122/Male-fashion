@@ -1,14 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Products = ({ products, page, PER_PAGE }) => {
+const Products = ({ products = [], page = 1, PER_PAGE = products.length }) => {
   return (
     <div className="row">
-      {products?.slice((page - 1) * PER_PAGE, page * PER_PAGE).map((item) => (
-        <div
-          key={item._id}
-          className="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mb-4"
-        >
+      {products.slice((page - 1) * PER_PAGE, page * PER_PAGE).map((item) => (
+        <div key={item._id} className="col-lg-3 col-md-6 col-sm-6 mb-4">
           <div className="product__item">
             <Link to={`/product/${item._id}`}>
               <div
@@ -19,16 +16,19 @@ const Products = ({ products, page, PER_PAGE }) => {
                   backgroundPosition: "center",
                   height: "250px",
                 }}
-              ></div>
+              />
             </Link>
+
             <div className="product__item__text">
               <h6>{item.name}</h6>
               <span className="product__category">
                 Category: {item.category}
               </span>
+
               <Link to={`/product/${item._id}`} className="add-cart">
                 + Add To Cart
               </Link>
+
               <h5>
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
@@ -43,4 +43,4 @@ const Products = ({ products, page, PER_PAGE }) => {
   );
 };
 
-export default Products
+export default Products;

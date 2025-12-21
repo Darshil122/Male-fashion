@@ -6,10 +6,11 @@ import Products from "../components/Products";
 import ProductsSkeleton from "../components/skeleton/ProductsSkeleton";
 
 const Product = () => {
-  const {category} = useParams();
+  const { category } = useParams();
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.product);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -17,9 +18,16 @@ const Product = () => {
     };
     fetchProducts();
   }, [dispatch, category]);
-  const allProducts = items.products || items.data ||[];
-  const PER_PAGE = 8;
-  const totalPages = Math.ceil(allProducts.length / PER_PAGE); 
+  
+const allProducts = Array.isArray(items.products) ? items.products : [];
+const PER_PAGE = 8;
+
+const filteredProducts = allProducts.filter((item) =>
+  item.name.toLowerCase().includes(search.toLowerCase())
+);
+
+const totalPages = Math.ceil(filteredProducts.length / PER_PAGE);
+
   return (
     <div>
       <section className="breadcrumb-option">
@@ -45,7 +53,15 @@ const Product = () => {
               <div className="shop__sidebar">
                 <div className="shop__sidebar__search">
                   <form action="#">
-                    <input type="text" placeholder="Search..." />
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      value={search}
+                      onChange={(e) => {
+                        setSearch(e.target.value);
+                        setPage(1);
+                      }}
+                    />
                     <button type="submit">
                       <span className="icon_search"></span>
                     </button>
@@ -290,11 +306,15 @@ const Product = () => {
             </div>
             <div className="col-lg-12">
               {/* product components */}
-              {!allProducts || allProducts.length === 0 ? (
+              {items.loading ? (
                 <ProductsSkeleton />
+              ) : filteredProducts.length === 0 ? (
+                <div className="text-center py-5">
+                  <h4>No products found</h4>
+                </div>
               ) : (
                 <Products
-                  products={allProducts}
+                  products={filteredProducts}
                   page={page}
                   PER_PAGE={PER_PAGE}
                 />
